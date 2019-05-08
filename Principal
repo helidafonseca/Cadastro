@@ -1,0 +1,173 @@
+import javax.swing.JOptionPane;
+
+public class Principal {
+	
+	static int FIM=0, QTDADE=0;
+	static final int QTEREGISTROS = 10;
+		
+	public static String codigo[] = new String[QTEREGISTROS];
+	public static String nome[] = new String[QTEREGISTROS];
+	public static String email[] = new String[QTEREGISTROS];
+	public static String cidade[] = new String[QTEREGISTROS];
+	public static String uf[] = new String[QTEREGISTROS];
+	
+	public static void main(String[] args) {
+		
+		for (int i=0; i<QTEREGISTROS;i++) {
+			codigo[i]=String.valueOf(i);
+		}
+		String opcao = "";
+	
+		while (!opcao.equals("6")) {
+			opcao = entradaDeDadosTexto("Menu de opções\n\n"+
+										"1 - Cadastrar \n" +
+										"2- Consultar \n" +
+										"3- Atualizar Email \n" +
+										"4- Excluir \n" +
+										"5- Listar Clientes \n" +
+										"6 - Sair \n\n");
+					
+				switch (opcao) {
+				case "1": cadastrarCliente();
+				break;
+				case "2": consultarCliente();
+				break;
+				case "3": atualizarEmailCliente();
+				break;
+				case "4": excluirCliente();
+				break;
+				case "5": listarClientes();
+				break;
+				case "6":
+				break;
+				default:
+					mensagem("Opção Inválida");
+				}
+		}
+	}
+	private static void cadastrarCliente() {
+		if (!cheio()) {
+			nome[FIM] = entradaDeDadosTexto("\nDigite o nome do cliente: ");
+			
+			if (nome[FIM]!="") {
+				
+			email[FIM] = entradaDeDadosTexto("\nDigite o email: ");
+			cidade[FIM] = entradaDeDadosTexto("\nDigite a cidade: ");
+			uf[FIM] = entradaDeDadosTexto("\nDigite a UF: ");
+			mensagem("\nO código do cliente " + nome[FIM] + " é " + codigo[FIM]);
+			FIM++;
+			QTDADE++;
+			} else {
+				mensagem("Digite o nome do cliente.");
+			}
+		} else {
+			mensagem("\nO número máximo de cadastros já foi alcançado.");
+		}
+	}
+	private static void consultarCliente() {
+		int controle = 0;
+		if(!vazio()) {
+		controle = Integer.parseInt(
+				entradaDeDadosTexto("Digite o código do cliente: ")
+				);
+		try {
+				if (nome[controle]!="") {
+					mensagem("\nDados do cliente:" +
+							"\nNome: " + nome[controle] +
+							"\nEmail: " + email[controle] +
+							"\nCidade: " + cidade[controle] +
+							"\nUF: " + uf[controle]);
+				} 
+				else {
+					mensagem("Código não cadastrado");
+				}
+		} catch (Exception excecao) {
+			mensagem("Código não encontrado");
+		}
+			} 
+			else {
+			mensagem("Cadastro vazio.");
+			}
+		}
+	public static void atualizarEmailCliente() {
+		int controle = 0;
+		String novoEmail;
+		if(!vazio()) {
+		controle = Integer.parseInt(
+				entradaDeDadosTexto("Código do cliente que deseja atualizar o email: ")
+				);
+		try {
+			if (nome[controle]!="") {
+					mensagem("Cliente " + nome[controle] +
+									", e-mail atual: " + email[controle]);
+					novoEmail = entradaDeDadosTexto("Digite o novo e-mail do cliente: ");
+					if (novoEmail!=null) {
+						email[controle] = novoEmail;
+						mensagem("E-mail atualizado");
+					} else {
+						mensagem("Digite um novo e-mail válido");
+					}
+			} else {
+					mensagem("Código não cadastrado");
+			}
+		} catch (Exception excecao) {
+			mensagem("Código não encontrado");
+		}		
+			} 
+			else {
+			mensagem("Cadastro vazio.");
+			}	
+	}	
+	public static void excluirCliente() {
+		int controle = 0;
+		if(!vazio()) {
+		controle = Integer.parseInt(
+				entradaDeDadosTexto("Código do cliente que deseja excluir: "));
+		try {
+			if (nome[controle]!="") {
+				mensagem("Cadastro excluído. Cliente:\n" +
+						"\nNome: " + nome[controle] +
+						"\nEmail: " + email[controle] +
+						"\nCidade: " + cidade[controle] +
+						"\nUF: " + uf[controle]);
+					
+					nome[controle] = null;
+					email[controle] = null;
+					cidade[controle] = null;
+					uf[controle] = null;
+					QTDADE--;
+				} 
+				else {
+					mensagem("Código não cadastrado");
+				}			
+		} catch (Exception excecao) {
+			mensagem("Código não encontrado");
+		  }
+		} 
+			else {
+			mensagem("Cadastro vazio.");
+			}		
+	}
+	public static void listarClientes() {
+		if (!vazio()) {
+			for (int i=0;i<FIM;i++) {
+				mensagem("\nCódigo: " + codigo[i] + " - Nome: " + nome[i] + "\n");
+			}		
+		} else {
+			mensagem("Cadastro vazio.");
+		}
+	}
+	public static boolean cheio() {
+		return (QTDADE==QTEREGISTROS);
+	}
+	public static boolean vazio() {
+		return (QTDADE==0);
+	}
+	public static void mensagem(String texto) {
+		JOptionPane.showMessageDialog(null, texto);
+	}
+	public static String entradaDeDadosTexto (String texto) {
+		return JOptionPane.showInputDialog(texto);
+	}
+}
+
